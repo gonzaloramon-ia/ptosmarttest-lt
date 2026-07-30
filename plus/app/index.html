@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#020713" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com; style-src 'self'; img-src 'self' data: https:; connect-src https://api.open-meteo.com https://dolarapi.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com; frame-src https://accounts.google.com; base-uri 'self'; object-src 'none'; frame-ancestors 'none'" />
+  <title>Punto Smart OS</title>
+  <meta name="description" content="Aplicación de Punto Smart OS Plus para sincronizar y recuperar la configuración del escritorio online." />
+  <meta name="robots" content="noindex,follow" />
+
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="manifest" href="../../site.webmanifest" />
+
+  <link rel="stylesheet" href="styles.css?v=180" />
+  <link rel="stylesheet" href="smartos-extra.css?v=180" />
+  <link rel="stylesheet" href="../../reliability.css?v=5" />
+  <link rel="stylesheet" href="plus.css?v=110" />
+  <link rel="stylesheet" href="../../v2.css?v=3" />
+<!-- Punto Smart OS - desarrollo original de Punto Smart - Punto Smart marca registrada ante INPI --></head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Punto Smart OS">
+        <span class="brand-mark"></span>
+        <span class="brand-text"><span>PUNTO</span><strong>SMART OS</strong></span>
+      </a>
+
+      <div class="status-zone">
+        <div class="status-pill hide-small">
+          <span class="status-icon">◷</span>
+          <span><b id="clock">--:--</b><small id="dateText">Cargando...</small></span>
+        </div>
+        <button class="status-pill hide-small live-status weather-live" id="weatherWidget" type="button" title="Tocá para usar tu ubicación" aria-live="polite">
+          <span class="status-icon weather" id="weatherIcon">☁</span>
+          <span class="live-status-copy"><b id="weatherTemp">Clima --°</b><small id="weatherDetail">Buenos Aires · Cargando…</small></span>
+        </button>
+        <button class="status-pill dolar live-status dollar-live" id="dollarWidget" type="button" title="Tocá para actualizar las cotizaciones" aria-live="polite">
+          <span class="dolar-logo">$</span>
+          <span class="live-status-copy"><b id="dollarBlue">Blue -- · Cargando…</b><small id="dollarOfficial">Oficial --</small></span>
+        </button>
+        <div class="status-pill country-global-pill">
+          <span class="status-icon">🌎</span>
+          <span><b>País</b><small><select id="localCountrySelect" class="country-select" aria-label="Cambiar país">
+            <option value="../../" selected>Argentina</option>
+            <option value="../../global/?country=US">United States</option>
+            <option value="../../global/?country=ES">España</option>
+            <option value="../../global/?country=MX">México</option>
+            <option value="../../global/?country=BR">Brasil</option>
+            <option value="../../global/?country=FR">France</option>
+          </select></small></span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="benefits-v2" aria-label="Beneficios de Punto Smart OS">
+        <div class="benefit-lead"><span aria-hidden="true">🌍</span><strong>El primer Sistema Operativo que te acompaña a todos lados.</strong></div>
+        <div class="benefit-grid">
+          <div class="benefit-item"><span aria-hidden="true">⚡</span><b>Más rápido. Más liviano. Más simple.</b></div>
+          <div class="benefit-item"><span aria-hidden="true">📱</span><b>Usalo desde tu celular, tablet o PC.</b></div>
+          <div class="benefit-item"><span aria-hidden="true">☁️</span><b>Todo en la Web. Sin instalar apps.</b></div>
+          <div class="benefit-item"><span aria-hidden="true">📶</span><b>No ocupa espacio en tu dispositivo.</b></div>
+        </div>
+        <div class="benefit-privacy"><span aria-hidden="true">🔒</span><b>No recopilamos tu información personal.</b></div>
+      </section>
+
+      <section class="smart-search smart-search-v2" aria-label="Smart OS Browser">
+        <form id="smartSearchForm" class="smart-search-box">
+          <span class="smart-search-brand" aria-label="Smart OS Browser"><span class="smart-search-brand-symbol" aria-hidden="true">✦</span><span class="smart-search-brand-text">Smart OS <span class="smart-search-brand-browser">Browser</span></span></span>
+          <span class="smart-search-divider" aria-hidden="true"></span>
+          <img id="activeSearchIcon" class="smart-search-provider-icon" src="../../assets/icons/google-com.png" alt="" aria-hidden="true" />
+          <input id="searchInput" type="search" autocomplete="off" placeholder="Buscar en Google..." aria-label="Buscar" />
+          <button id="smartSearchGo" class="smart-search-go" type="submit">Buscar</button>
+        </form>
+        <div class="search-categories" id="searchCategories" role="group" aria-label="Dónde buscar">
+          <div class="search-category-wrap" data-category-wrap="web">
+            <button type="button" class="search-category active" data-category="web" aria-haspopup="menu" aria-expanded="false">
+              <img class="search-category-icon" alt="" aria-hidden="true" /><span>Web</span><span class="search-caret">▼</span>
+            </button>
+            <div class="search-provider-menu" data-provider-menu="web" role="menu"></div>
+          </div>
+          <div class="search-category-wrap" data-category-wrap="ai">
+            <button type="button" class="search-category" data-category="ai" aria-haspopup="menu" aria-expanded="false">
+              <img class="search-category-icon" alt="" aria-hidden="true" /><span>IA</span><span class="search-caret">▼</span>
+            </button>
+            <div class="search-provider-menu" data-provider-menu="ai" role="menu"></div>
+          </div>
+          <div class="search-category-wrap" data-category-wrap="videos">
+            <button type="button" class="search-category" data-category="videos" aria-haspopup="menu" aria-expanded="false">
+              <img class="search-category-icon" alt="" aria-hidden="true" /><span>Videos</span><span class="search-caret">▼</span>
+            </button>
+            <div class="search-provider-menu" data-provider-menu="videos" role="menu"></div>
+          </div>
+          <div class="search-category-wrap" data-category-wrap="buy">
+            <button type="button" class="search-category" data-category="buy" aria-haspopup="menu" aria-expanded="false">
+              <img class="search-category-icon" alt="" aria-hidden="true" /><span>Comprar</span><span class="search-caret">▼</span>
+            </button>
+            <div class="search-provider-menu" data-provider-menu="buy" role="menu"></div>
+          </div>
+          <div class="search-category-wrap" data-category-wrap="news">
+            <button type="button" class="search-category" data-category="news" aria-haspopup="menu" aria-expanded="false">
+              <img class="search-category-icon" alt="" aria-hidden="true" /><span>Noticias</span><span class="search-caret">▼</span>
+            </button>
+            <div class="search-provider-menu" data-provider-menu="news" role="menu"></div>
+          </div>
+          <div class="search-category-wrap" data-category-wrap="maps">
+            <button type="button" class="search-category" data-category="maps" aria-haspopup="menu" aria-expanded="false">
+              <img class="search-category-icon" alt="" aria-hidden="true" /><span>Maps</span><span class="search-caret">▼</span>
+            </button>
+            <div class="search-provider-menu" data-provider-menu="maps" role="menu"></div>
+          </div>
+        </div>
+      </section>
+      <section class="panel wide" data-section="Favoritos y Esenciales">
+        <div class="panel-title"><span>★</span><h2>Favoritos y Esenciales</h2><button type="button" class="section-add-btn" data-add-group="favorites">+ Agregar</button></div>
+        <div class="icon-grid" id="favoritesGrid"></div>
+      </section>
+
+      <section class="panel wide" data-section="Compras y Contenido">
+        <div class="panel-title"><span>🛒</span><h2>Compras y Contenido</h2><button type="button" class="section-add-btn" data-add-group="content">+ Agregar</button></div>
+        <div class="icon-grid" id="contentGrid"></div>
+      </section>
+
+      <section class="panel wide" data-section="Fotos y Cámara">
+        <div class="panel-title"><span>📷</span><h2>Fotos y Cámara</h2><button type="button" class="section-add-btn" data-add-group="fotos">+ Agregar</button></div>
+        <div class="icon-grid" id="fotosGrid"></div>
+      </section>
+
+      <section class="panel wide" data-section="Juegos y Ocio">
+        <div class="panel-title"><span>🎮</span><h2>Juegos y Ocio</h2><button type="button" class="section-add-btn" data-add-group="juegos">+ Agregar</button></div>
+        <div class="icon-grid" id="juegosGrid"></div>
+      </section>
+
+      <section class="panel wide" data-section="IA y Productividad">
+        <div class="panel-title"><span>✦</span><h2>IA y Productividad</h2><button type="button" class="section-add-btn" data-add-group="ai">+ Agregar</button></div>
+        <div class="icon-grid" id="aiGrid"></div>
+      </section>
+
+      <section class="folder-board">
+        <article class="panel folder-panel" data-folder="tramites">
+          <button class="folder-open" data-folder="tramites" aria-label="Abrir carpeta Trámites">›</button>
+          <div class="panel-title"><span>▣</span><h2>Trámites</h2><button type="button" class="section-add-btn" data-add-group="tramites">+ Agregar</button></div>
+          <div class="mini-grid" id="tramitesGrid"></div>
+        </article>
+
+        <article class="panel folder-panel" data-folder="noticias">
+          <button class="folder-open" data-folder="noticias" aria-label="Abrir carpeta Noticias y Deportes">›</button>
+          <div class="panel-title"><span>▣</span><h2>Noticias y Deportes</h2><button type="button" class="section-add-btn" data-add-group="noticias">+ Agregar</button></div>
+          <div class="mini-grid" id="noticiasGrid"></div>
+        </article>
+
+        <article class="panel folder-panel" data-folder="bancos">
+          <button class="folder-open" data-folder="bancos" aria-label="Abrir carpeta Bancos">›</button>
+          <div class="panel-title"><span>▣</span><h2>Bancos</h2><button type="button" class="section-add-btn" data-add-group="bancos">+ Agregar</button></div>
+          <div class="mini-grid" id="bancosGrid"></div>
+        </article>
+
+        <article class="panel folder-panel" data-folder="negocio">
+          <button class="folder-open" data-folder="negocio" aria-label="Abrir carpeta Negocio y Proveedores">›</button>
+          <div class="panel-title"><span>▣</span><h2>Negocio / Proveedores</h2><button type="button" class="section-add-btn" data-add-group="negocio">+ Agregar</button></div>
+          <div class="mini-grid" id="negocioGrid"></div>
+        </article>
+      </section>
+
+      <section class="custom-area">
+        <div class="custom-left">
+          <div class="custom-title">Tus accesos personalizados <span title="Se guardan en este dispositivo">ⓘ</span></div>
+          <div class="custom-grid" id="customGrid"></div>
+        </div>
+        <article class="help-card">
+          <span class="help-spark">✦</span>
+          <div>
+            <b>Personalizá tu Smart OS</b>
+            <p>Agregá los sitios y aplicaciones que más usás. Tocá una baldosa libre, pegá el link y guardalo.</p>
+            <button id="howBtn">¿Cómo agregar un acceso?</button>
+          </div>
+        </article>
+      </section>
+
+      <a class="ad-banner bottom-ad" href="https://wa.me/5491148706501?text=Hola%2C%20quiero%20consultar%20por%20un%20espacio%20publicitario%20en%20Punto%20Smart%20OS" target="_blank" rel="noopener">
+        <span class="ad-icon">📣</span>
+        <span class="ad-copy"><b>Llegá a más personas</b><small>Anunciá tu producto o servicio en Punto Smart OS.</small></span>
+        <span class="ad-cta">ANUNCIÁ ACÁ</span>
+      </a>
+    </main>
+
+    <footer class="footer">
+      <div><b>PUNTO SMART OS</b><small>Tu portal. Todo en un lugar.</small></div>
+      <button id="editBtn">✎ Editar</button>
+      <button type="button" data-install-app hidden>Instalar app</button>
+      <button id="supportBtn">Soporte</button>
+      <button id="suggestBtn">☏ Sugerencias</button>
+      <span>© 2026 Punto Smart. Punto Smart® marca registrada. Punto Smart OS™ desarrollo original. <a href="../../legal/">Legal</a></span>
+    </footer>
+  </div>
+
+  <dialog id="customDialog" class="modal">
+    <form method="dialog" id="customForm">
+      <h3 id="customDialogTitle">Agregar página o aplicación</h3>
+      <label>Nombre
+        <input id="customName" maxlength="24" placeholder="Ej: Proveedor celulares" required />
+      </label>
+      <label>Link
+        <input id="customUrl" type="url" placeholder="https://www.ejemplo.com" required />
+      </label>
+      <label>Icono opcional
+        <input id="customIcon" type="url" placeholder="https://.../icono.png" />
+      </label>
+      <p class="modal-note">Si no cargás icono, intenta traer el favicon automáticamente. Si falla, usa la inicial del nombre.</p>
+      <div class="modal-actions">
+        <button type="button" class="danger" id="deleteCustomBtn">Borrar</button>
+        <span></span>
+        <button type="button" id="cancelCustomBtn">Cancelar</button>
+        <button class="primary" value="save">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="folderDialog" class="modal folder-modal">
+    <div class="folder-modal-inner">
+      <button class="modal-close" id="closeFolderBtn">×</button>
+      <h3 id="folderTitle">Carpeta</h3>
+      <div class="icon-grid modal-grid" id="folderModalGrid"></div>
+    </div>
+  </dialog>
+
+  <dialog id="infoDialog" class="modal">
+    <div class="info-content">
+      <button class="modal-close" id="closeInfoBtn">×</button>
+      <h3>Cómo agregar un acceso</h3>
+      <p>1. Tocá una baldosa “Agregar acceso”.</p>
+      <p>2. Escribí el nombre y pegá el link completo, por ejemplo: <b>https://www.ejemplo.com</b>.</p>
+      <p>3. Guardá. El acceso queda en este dispositivo.</p>
+      <p>Para cambiarlo, tocá “Editar” y seleccioná la baldosa.</p>
+    </div>
+  </dialog>
+
+  <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden />
+  <script src="script.js?v=220"></script>
+  <script src="../../install.js?v=1"></script>
+  <script src="https://accounts.google.com/gsi/client"></script>
+  <script src="plus-config.js?v=97"></script>
+  <script src="plus-drive.js?v=110"></script>
+</body>
+</html>
