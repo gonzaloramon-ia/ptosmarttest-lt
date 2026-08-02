@@ -102,4 +102,20 @@ for(const file of ['index.html','plus/app/index.html','global/index.html','globa
   }
 }
 
+for(const file of ['index.html','plus/app/index.html']){
+  const html=await readFile(path.join(root,file),'utf8');
+  assert.match(html,/El primer Sistema Operativo que te acompaña a todos lados\./);
+  assert.match(html,/Más rápido, más liviano y sin instalar apps\./);
+  assert.match(html,/Usalo desde cualquier dispositivo, sin ocupar espacio\./);
+  assert.match(html,/No recopilamos tu información personal\./);
+  assert.match(html,/id="visualSearchBtn"/);
+  assert.match(html,/id="visualSearchAllBtn"/);
+  assert.equal((html.match(/data-visual-provider=/g)||[]).length,4,`${file} debe incluir los cuatro motores de búsqueda visual.`);
+}
+assert.match(core,/const visualSearchServices = Object\.freeze/);
+assert.match(core,/google:\{name:'Google Lens'/);
+assert.match(core,/bing:\{name:'Bing Visual Search'/);
+assert.match(core,/tineye:\{name:'TinEye'/);
+assert.match(core,/yandex:\{name:'Yandex Images'/);
+
 console.log(`OK: ${jsFiles.length} scripts, ${htmlFiles.length} HTML y enlaces locales validados.`);

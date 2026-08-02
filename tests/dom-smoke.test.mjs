@@ -96,6 +96,25 @@ test('La instalación como app queda visible y ofrece instrucciones de respaldo'
   dom.window.close();
 });
 
+test('La búsqueda visual concentra los cuatro motores sin procesar la imagen en Punto Smart OS',async()=>{
+  const {dom,errors}=await loadPage('/index.html');
+  const {document}=dom.window;
+  document.getElementById('visualSearchBtn').click();
+  const dialog=document.getElementById('visualSearchDialog');
+  assert.equal(errors.length,0,errors.map(error=>error.message).join('\n'));
+  assert(dialog.open,'El selector de búsqueda visual debe abrirse desde la barra.');
+  assert.equal(document.querySelectorAll('[data-visual-provider]').length,4);
+  assert.match(dialog.textContent,/Google Lens/);
+  assert.match(dialog.textContent,/Bing Visual Search/);
+  assert.match(dialog.textContent,/TinEye/);
+  assert.match(dialog.textContent,/Yandex Images/);
+  assert.match(dialog.textContent,/Punto Smart OS no la guarda ni la procesa/);
+  assert(document.getElementById('visualSearchAllBtn'));
+  document.getElementById('closeVisualSearchBtn').click();
+  assert.equal(dialog.open,false);
+  dom.window.close();
+});
+
 test('Una configuración legacy migra al esquema actual sin bloquear nuevos defaults',async()=>{
   const legacy={favorites:[{id:'google',name:'Google',url:'https://www.google.com/',domain:'google.com'}]};
   const {dom}=await loadPage('/index.html',window=>window.localStorage.setItem('ps_groups_state',JSON.stringify(legacy)));
@@ -111,8 +130,8 @@ test('Plus exige reconexión tras recargar y mantiene las herramientas de respal
     window.localStorage.setItem('ps_plus_connected','1');
   });
   const {document}=dom.window;
-  assert.equal(document.getElementById('plusSmall').textContent,'Drive');
-  assert.match(document.getElementById('plusStatus').textContent,/Reconectá/);
+  assert.equal(document.getElementById('plusSmall').textContent,'Reconectar');
+  assert.match(document.getElementById('plusStatus').textContent,/Reconectá|Restaurando conexión/);
   assert(document.getElementById('exportConfigBtn'));
   assert.equal(document.getElementById('resetBtn'),null);
   dom.window.close();

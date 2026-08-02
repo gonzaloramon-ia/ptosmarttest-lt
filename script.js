@@ -816,6 +816,37 @@ smartSearchForm?.addEventListener('submit',event=>{
 });
 renderSmartProviderMenus();
 updateSmartSearchUI();
+
+// Los motores reciben la imagen en sus propias interfaces. Sin backend no es seguro
+// ni estable reenviar archivos locales a servicios externos desde Punto Smart OS.
+const visualSearchDialog = document.getElementById('visualSearchDialog');
+const visualSearchButton = document.getElementById('visualSearchBtn');
+const closeVisualSearchButton = document.getElementById('closeVisualSearchBtn');
+const visualSearchAllButton = document.getElementById('visualSearchAllBtn');
+const visualSearchNote = document.getElementById('visualSearchNote');
+const visualSearchServices = Object.freeze({
+  google:{name:'Google Lens',url:'https://lens.google/'},
+  bing:{name:'Bing Visual Search',url:'https://www.bing.com/images/'},
+  tineye:{name:'TinEye',url:'https://tineye.com/'},
+  yandex:{name:'Yandex Images',url:'https://yandex.com/images/'}
+});
+function launchVisualSearch(serviceId){
+  const service = visualSearchServices[serviceId];
+  if(!service) return;
+  openSmartUrl(service.url);
+  if(visualSearchNote) visualSearchNote.textContent = `Se abrió ${service.name}. Subí la imagen directamente allí para iniciar la búsqueda.`;
+}
+function launchAllVisualSearches(){
+  Object.keys(visualSearchServices).forEach(serviceId => launchVisualSearch(serviceId));
+  if(visualSearchNote) visualSearchNote.textContent = 'Abrimos los cuatro buscadores. Si el navegador bloqueó alguna pestaña, podés abrirla desde esta lista.';
+}
+visualSearchButton?.addEventListener('click', () => openDialog(visualSearchDialog));
+closeVisualSearchButton?.addEventListener('click', () => closeDialog(visualSearchDialog));
+document.querySelectorAll('[data-visual-provider]').forEach(button => {
+  button.addEventListener('click', () => launchVisualSearch(button.dataset.visualProvider));
+});
+visualSearchAllButton?.addEventListener('click', launchAllVisualSearches);
+
 function initPlusAbTest(){
   const btn = document.getElementById('plusSalesBtn');
   const dialog = document.getElementById('plusSalesDialog');

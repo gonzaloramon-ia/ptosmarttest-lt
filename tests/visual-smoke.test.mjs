@@ -96,6 +96,24 @@ for(const viewport of [{width:360,height:800},{width:768,height:1024},{width:136
   });
 }
 
+test('La búsqueda visual se abre completa y sin desborde en móvil',async()=>{
+  const {page,errors}=await open('/',390,844);
+  await page.click('#visualSearchBtn');
+  const state=await page.evaluate(()=>({
+    open:document.getElementById('visualSearchDialog').open,
+    overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
+    providers:document.querySelectorAll('[data-visual-provider]').length,
+    allButton:Boolean(document.getElementById('visualSearchAllBtn'))
+  }));
+  assert.equal(errors.length,0,errors.join('\n'));
+  assert(state.open);
+  assert(state.overflow<=1);
+  assert.equal(state.providers,4);
+  assert(state.allButton);
+  await page.screenshot({path:'/tmp/puntosmart-visual-search-mobile.png',fullPage:true});
+  await page.close();
+});
+
 for(const country of ['BR','FR']){
   test(`Global ${country} muestra datos live sin quedar cargando`,async()=>{
     const {page,errors}=await open(`/global/?country=${country}`,390,844);
