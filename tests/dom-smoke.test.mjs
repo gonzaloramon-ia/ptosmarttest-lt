@@ -150,7 +150,8 @@ for(const country of ['BR','FR']){
     assert.match(document.querySelector('#favoritesGrid .tile img').src,/\/assets\/icons\//);
     assert.equal(document.querySelectorAll('.tile img[src*="google.com/s2/favicons"]').length,0);
     assert.match(document.getElementById('resetBtn').textContent,/↺/);
-    document.querySelector('.engine-pill[data-engine="soporte"]').click();
+    assert.equal(document.querySelectorAll('.search-category').length,6,'La búsqueda debe usar las seis categorías de Argentina.');
+    document.getElementById('supportBtn').click();
     assert(document.getElementById('contactDialog').open,'Soporte debe abrir el contacto interno.');
     document.getElementById('dismissContactBtn').click();
     document.getElementById('suggestBtn').click();

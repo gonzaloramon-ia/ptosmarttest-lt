@@ -57,7 +57,8 @@ assert.match(core,/function remoteFavicon\(/);
 assert.match(global,/function remoteFavicon\(/);
 assert(!/domain=\$\{encodeURIComponent/.test(core+global),'No debe volver la variante rota del servicio de favicons.');
 assert(!/technical\+support/.test(global),'Soporte no debe volver a dirigir a una búsqueda de Google.');
-assert.match(global,/btn\.dataset\.engine === 'soporte'/);
+assert.match(global,/supportBtn\.onclick\s*=/);
+assert.match(global,/const smartSearchProviders=buildGlobalSmartSearchProviders\(\)/);
 assert(!/supportBtn\.onclick\s*=.*mailto:|suggestBtn\.onclick\s*=.*mailto:/.test(global),'Soporte y sugerencias deben abrir el contacto interno.');
 assert.match(global,/function openContact\(/);
 assert.match(drive,/puntosmart-config-\$\{COUNTRY\.toLowerCase\(\)\}-v2\.json/);
@@ -102,7 +103,7 @@ for(const file of ['index.html','plus/app/index.html','global/index.html','globa
   }
 }
 
-for(const file of ['index.html','plus/app/index.html']){
+for(const file of ['index.html','plus/app/index.html','global/index.html','global-plus/index.html']){
   const html=await readFile(path.join(root,file),'utf8');
   assert.match(html,/El primer Sistema Operativo que te acompaña a todos lados\./);
   assert.match(html,/Más rápido, más liviano y sin instalar apps\./);
@@ -113,6 +114,7 @@ for(const file of ['index.html','plus/app/index.html']){
   assert.equal((html.match(/data-visual-provider=/g)||[]).length,4,`${file} debe incluir los cuatro motores de búsqueda visual.`);
 }
 assert.match(core,/const visualSearchServices = Object\.freeze/);
+assert.match(global,/const visualSearchServices=Object\.freeze/);
 assert.match(core,/google:\{name:'Google Lens'/);
 assert.match(core,/bing:\{name:'Bing Visual Search'/);
 assert.match(core,/tineye:\{name:'TinEye'/);
